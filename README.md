@@ -2,140 +2,247 @@
 
 [![License: MPL 2.0](https://img.shields.io/badge/License-MPL_2.0-brightgreen.svg)](https://opensource.org/licenses/MPL-2.0)
 
-A keyboard-driven terminal interface for monitoring and analyzing real-time data streams with AI.
+**Keyboard-driven terminal interface for real-time data streaming with AI**
 
-**Backend Required:** This TUI connects to the [TurboStream backend API](https://github.com/turboline-ai/turbostream). You must have the backend running to use this terminal UI.
+A beautiful terminal UI built with Bubble Tea for monitoring high-velocity data streams and analyzing them with LLMs in real-time.
 
-A terminal client built with Bubble Tea and Lip Gloss that provides real-time feed monitoring and LLM streaming capabilities.
+---
 
-## Features
+## Quick Start Video
 
-### Real-Time Data Streaming
-- WebSocket connection to backend at `/ws`
-- Token-by-token LLM response streaming
-- Feed subscription management
-- Automatic reconnection handling
+> 📹 **Coming Soon:** Watch our TUI demo and setup guide on YouTube
 
-### Observability Dashboard
-Press `d` to access the comprehensive dashboard showing:
+---
 
-**Stream Health Panel:**
-- Connection status and uptime
-- Message throughput (rate, bytes/sec)
-- Reconnection count
-- Message rate sparkline chart
+## Get Started in 3 Steps
 
-**LLM Context Panel:**
-- Events in context (local cache)
-- Memory usage tracking
-- Context age (oldest item)
-- Dropped/evicted message counts
-- Cache memory sparkline chart
+### 1. Start the Backend
 
-**Payload Stats Panel:**
-- Last/average/max payload sizes
-- Size distribution histogram
-
-**LLM/Tokens Panel:**
-- Input/output token counts (last request and session totals)
-- Time to First Token (TTFT) metrics
-- Generation time with sparkline
-- Context utilization percentage
-- Events in LLM context
-- Error tracking
-
-For detailed metric definitions, see [DASHBOARD_METRICS_REVIEW.md](./DASHBOARD_METRICS_REVIEW.md).
-
-### Live Feed Monitoring
-- Feed list with connection status indicators
-- Real-time data display
-- AI analysis streaming
-- Context state visualization
-
-## Prerequisites
-
-### Required
-- **Go 1.24+**
-- **TurboStream Backend** - Get it from [github.com/turboline-ai/turbostream](https://github.com/turboline-ai/turbostream)
-
-### Start the Backend First
+The TUI connects to the [TurboStream backend](https://github.com/turboline-ai/turbostream). Start it first:
 
 ```bash
-# Clone and start the backend
+# Clone and run the backend
 git clone https://github.com/turboline-ai/turbostream.git
 cd turbostream
 cp .env.local.example .env.local
-# Edit .env.local with your configuration
+# Edit .env.local with your MongoDB and LLM credentials
 go run ./cmd/server
 ```
 
-The backend will start on `http://localhost:7210` by default.
+Backend runs at `http://localhost:7210` by default.
 
-## Environment Variables
-
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `TURBOSTREAM_BACKEND_URL` | Backend REST API URL | `http://localhost:7210` |
-| `TURBOSTREAM_WEBSOCKET_URL` | WebSocket endpoint | `ws://localhost:7210/ws` |
-| `TURBOSTREAM_TOKEN` | Pre-configured JWT token (optional) | None |
-| `TURBOSTREAM_EMAIL` | Pre-fill login email (optional) | None |
-
-## Quick Start
-
-### 1. Start the Backend
-See [Prerequisites](#prerequisites) above for backend setup.
-
-### 2. Run the TUI
+### 2. Clone & Run the TUI
 
 ```bash
 git clone https://github.com/turboline-ai/turbostream-tui.git
 cd turbostream-tui
-go mod download   # Install dependencies
-go run .          # or: go build && ./turbostream-tui
+go run .
 ```
 
-You'll be prompted to login with credentials from your backend.
+### 3. Login & Start Monitoring
+
+Enter your credentials (from backend user registration) and start streaming! 🚀
+
+---
+
+## Features
+
+### Real-Time Streaming
+- WebSocket connection with automatic reconnection
+- Token-by-token LLM response streaming
+- Live feed data monitoring
+- Sub-second latency
+
+### Observability Dashboard
+
+Press `d` to toggle the dashboard:
+
+> 📹 **Coming Soon:** Watch the dashboard tour video
+
+**Panels:**
+- **Stream Health** - Connection status, throughput, reconnections
+- **LLM Context** - Memory usage, context size, eviction stats
+- **Payload Stats** - Size distribution, averages, histograms
+- **LLM Performance** - Token counts, TTFT, generation time
+
+**Visualization:**
+- Sparkline charts for real-time metric trends
+- 60-second rolling windows
+- Color-coded indicators (green = good, red = issues)
+
+For detailed metric definitions: [DASHBOARD_METRICS_REVIEW.md](./DASHBOARD_METRICS_REVIEW.md)
+
+### Feed Management
+- Browse available feeds
+- Subscribe/unsubscribe in real-time
+- Monitor multiple feeds simultaneously
+- Custom AI prompts per feed
+
+---
 
 ## Key Bindings
 
 | Key | Action |
 |-----|--------|
-| `Enter` | Submit login form / Execute action |
+| `Enter` | Submit / Execute action |
 | `d` | Toggle dashboard view |
 | `q` | Quit application |
 | `↑/↓` | Navigate feed list |
 | `c` | Reconnect WebSocket |
-| `Tab` | Cycle through form inputs |
+| `Tab` | Cycle through inputs |
+| `Esc` | Go back / Cancel |
 
-## Dashboard Panels
+> 📹 **Coming Soon:** Watch the keyboard shortcuts tutorial
 
-The dashboard uses **sparkline charts** to visualize metric trends over 60-second windows:
+---
 
-- **Green sparklines**: Higher values are good (throughput, rate)
-- **Red sparklines**: Higher values are bad (latency, memory usage)
+## Configuration
 
-Top summary bar shows: WebSocket status, msg/s, KB/s, context items, tokens, and generation time.
+### Environment Variables
 
-## License
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `TURBOSTREAM_BACKEND_URL` | Backend REST API URL | `http://localhost:7210` |
+| `TURBOSTREAM_WEBSOCKET_URL` | WebSocket endpoint | `ws://localhost:7210/ws` |
+| `TURBOSTREAM_TOKEN` | Pre-configured JWT token | None |
+| `TURBOSTREAM_EMAIL` | Pre-fill login email | None |
 
-This project is licensed under the **Mozilla Public License 2.0 (MPL-2.0)**. See the [LICENSE](./LICENSE) file for details.
+**Example:**
+
+```bash
+export TURBOSTREAM_BACKEND_URL=https://your-backend.railway.app
+export TURBOSTREAM_WEBSOCKET_URL=wss://your-backend.railway.app/ws
+go run .
+```
+
+---
+
+## Screenshots
+
+### Main Feed View
+![Feed View](https://turbocdn.blob.core.windows.net/blog-images/terminal-ui.png)
+
+### Observability Dashboard
+> 📹 **Coming Soon:** Dashboard walkthrough video
+
+---
+
+## Development
+
+### Prerequisites
+- Go 1.24+
+- Running TurboStream backend
+
+### Build from Source
+
+```bash
+# Clone
+git clone https://github.com/turboline-ai/turbostream-tui.git
+cd turbostream-tui
+
+# Install dependencies
+go mod download
+
+# Build
+go build -o turbostream-tui .
+
+# Run
+./turbostream-tui
+```
+
+### Project Structure
+
+```
+turbostream-tui/
+├── main.go              # Main application entry
+├── ws.go                # WebSocket handling
+├── pkg/
+│   └── api/             # Backend API client
+└── README.md
+```
+
+### Running Tests
+
+```bash
+go test ./...
+```
+
+---
+
+## Troubleshooting
+
+### Can't Connect to Backend
+
+**Error:** `Connection refused` or `Failed to connect`
+
+**Fix:**
+1. Check backend is running: `curl http://localhost:7210/health`
+2. Verify `TURBOSTREAM_BACKEND_URL` is correct
+3. Check firewall settings
+
+### WebSocket Disconnects
+
+**Error:** `WebSocket connection closed`
+
+**Fix:**
+- Press `c` to reconnect manually
+- Check backend logs for errors
+- Verify network stability
+
+### Authentication Failed
+
+**Error:** `Invalid token` or `Auth failed`
+
+**Fix:**
+1. Register a user on the backend first
+2. Use correct email/password
+3. Check JWT token hasn't expired (7 days)
+
+**Need more help?** [GitHub Issues](https://github.com/turboline-ai/turbostream-tui/issues)
+
+---
+
+## Resources
+
+- 🏠 **TurboStream Backend**: [github.com/turboline-ai/turbostream](https://github.com/turboline-ai/turbostream)
+- 📚 **API Documentation**: [turboline.ai/docs/api](https://turboline.ai/docs/api)
+- 📖 **Dashboard Metrics**: [DASHBOARD_METRICS_REVIEW.md](./DASHBOARD_METRICS_REVIEW.md)
+- 💬 **Discussions**: [GitHub Discussions](https://github.com/turboline-ai/turbostream-tui/discussions)
+- 🐛 **Report Issues**: [GitHub Issues](https://github.com/turboline-ai/turbostream-tui/issues)
+- 📺 **Video Tutorials**: [YouTube](https://youtube.com/@turboline-ai)
+
+---
 
 ## Contributing
 
-We welcome contributions from the community! Before contributing, please:
+We welcome contributions!
 
-1. **Fork the repository** and create a feature branch from `main`.
-2. **Follow Go conventions** – run `go fmt` and `go vet` before committing.
-3. **Write clear commit messages** describing what changed and why.
-4. **Test your changes** – ensure the TUI builds and runs correctly with the backend.
-5. **Open a pull request** with a clear description of your changes.
+**Quick Start:**
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/my-feature`
+3. Make your changes
+4. Run tests: `go test ./...`
+5. Format code: `go fmt ./...`
+6. Submit a pull request
 
-### Code Style
-- Use `gofmt` for formatting.
-- Keep functions focused and well-documented.
-- Follow existing patterns in the codebase for consistency.
+**Code Style:**
+- Use `gofmt` for formatting
+- Follow existing patterns
+- Keep functions focused and documented
+- Test your changes with the backend
 
-### Reporting Issues
-- Use GitHub Issues to report bugs or request features.
-- Include steps to reproduce, expected behavior, and actual behavior.
-- Provide Go version and OS information when reporting bugs.
+---
+
+## License
+
+Licensed under the **Mozilla Public License 2.0 (MPL-2.0)**.
+
+See [LICENSE](LICENSE) for details.
+
+---
+
+**Built with [Bubble Tea](https://github.com/charmbracelet/bubbletea) 🫧**
+
+**Made with ❤️ by [Turboline AI](https://turboline.ai)**
+
+Copyright 2024-2025 Turboline AI. All rights reserved.
